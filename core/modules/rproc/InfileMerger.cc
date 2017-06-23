@@ -186,12 +186,13 @@ bool InfileMerger::merge(std::shared_ptr<proto::WorkerResponse> response) {
     bool ret = false;
     // Add columns to rows in virtFile.
     int resultJobId = response->result.jobid() * MAX_JOB_ATTEMPTS;
-    int attemptCount = response->result.attemptcount(); //
+    int attemptCount = response->result.attemptcount();
     if (attemptCount >= MAX_JOB_ATTEMPTS) {
         LOGS(_log, LOG_LVL_ERROR, queryIdJobStr << " Canceling query attemptCount too large at " << attemptCount);
         return false;
     }
     resultJobId += attemptCount;
+
     ProtoRowBuffer::Ptr pRowBuffer = std::make_shared<ProtoRowBuffer>(response->result,
                                      resultJobId, _jobIdColName, _jobIdSqlType, _jobIdMysqlType);
     std::string const virtFile = _infileMgr.prepareSrc(pRowBuffer, queryIdJobStr);
@@ -284,9 +285,6 @@ bool InfileMerger::isFinished() const {
     return _isFinished;
 }
 
-////////////////////////////////////////////////////////////////////////
-// InfileMerger private
-////////////////////////////////////////////////////////////////////////
 
 /// Apply a SQL query, setting the appropriate error upon failure.
 bool InfileMerger::_applySqlLocal(std::string const& sql) {
