@@ -36,6 +36,7 @@ apt-get --yes install bash \
     g++ \
     gettext \
     git \
+    libjemalloc-dev \
     libbz2-dev \
     libglib2.0-dev \
     libpthread-workqueue-dev \
