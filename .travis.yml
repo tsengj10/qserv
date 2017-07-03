@@ -33,6 +33,9 @@ notifications:
     secure: eRFF9b5XJbZcyfxMojWTOB4bwWUVJf0CRaOYnCsV7cMCW5BwrDRwC+8tpZyEbetyici7XdFN33kW4rRp9UFfOCIsLS5fMJEKgjvgD0ybucThPsBqLE2VDzDzA6dUji7CATCPUtvoJEymM41pnvDZbXmtalipYzZJMPNXHyE8Yy0=
 
 after_success:
+  - echo "Push $VERSION to Docker Hub"
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push "$VERSION"
   - docker push "${VERSION}_master"
   - docker push "${VERSION}_worker"
+
