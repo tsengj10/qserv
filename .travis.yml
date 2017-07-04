@@ -18,12 +18,15 @@ before_install:
   # whose current commit is a branch HEAD
   - git checkout -b travis
   - export VERSION="qserv/qserv:$(git rev-parse --short HEAD)"
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - export BRANCH_IMAGE="qserv/qserv:$BRANCH"
 
 install:
   # Retrieve container with Qserv dependencies
   - docker pull qserv/qserv:dev
 
 script:
+  - echo "Building and testing $VERSION (alias $BRANCH_IMAGE) and related master and worker images"
   - ./admin/tools/docker/3_build-git-image.sh -L -T "$VERSION" "$PWD"
   - ./admin/tools/docker/4_build-configured-images.sh -L -i "$VERSION"
   - ./admin/tools/docker/deployment/localhost/run-multinode-tests.sh
@@ -38,12 +41,11 @@ after_success:
   - docker push "$VERSION"
   - docker push "${VERSION}_master"
   - docker push "${VERSION}_worker"
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
   - echo "Add tag $BRANCH to images above and push to Docker Hub"
-  - docker tag "$VERSION" "qserv/qserv:$BRANCH"
-  - docker tag "${VERSION}_master" "qserv/qserv:${BRANCH}_master"
-  - docker tag "${VERSION}_worker" "qserv/qserv:${BRANCH}_worker"
+  - docker tag "$VERSION" "$BRANCH_IMAGE"
+  - docker tag "${VERSION}_master" "${BRANCH_IMAGE}_master"
+  - docker tag "${VERSION}_worker" "${BRANCH_IMAGE}_worker"
   - docker push "qserv/qserv:$BRANCH"
-  - docker push "qserv/qserv:${BRANCH}_master"
-  - docker push "qserv/qserv:${BRANCH}_worker"
+  - docker push "${BRANCH_IMAGE}_master"
+  - docker push "${BRANCH_IMAGE}_worker"
 
