@@ -325,10 +325,10 @@ public:
 };
 
 
-class BinaryComparasionPredicateCBH : public BaseCBH {
+class BinaryComparisonPredicateCBH : public BaseCBH {
 public:
-    virtual ~BinaryComparasionPredicateCBH() {}
-    virtual void handleBinaryComparasionPredicate(
+    virtual ~BinaryComparisonPredicateCBH() {}
+    virtual void handleBinaryComparisonPredicate(
             shared_ptr<query::CompPredicate> const & comparisonPredicate) = 0;
 };
 
@@ -1095,7 +1095,7 @@ private:
 // PredicateExpressionAdapter gathers BoolFactors into a BoolFactor (which is a BoolTerm).
 class PredicateExpressionAdapter :
         public AdapterT<PredicateExpressionCBH>,
-        public BinaryComparasionPredicateCBH,
+        public BinaryComparisonPredicateCBH,
         public BetweenPredicateCBH,
         public InPredicateCBH,
         public ExpressionAtomPredicateCBH,
@@ -1105,8 +1105,8 @@ public:
             QSMySqlParser::PredicateExpressionContext* ctx)
     : AdapterT(parent), _ctx(ctx) {}
 
-    // BinaryComparasionPredicateCBH
-    void handleBinaryComparasionPredicate(
+    // BinaryComparisonPredicateCBH
+    void handleBinaryComparisonPredicate(
             shared_ptr<query::CompPredicate> const & comparisonPredicate) override {
         _prepBoolFactor();
         _boolFactor->addBoolFactorTerm(comparisonPredicate);
@@ -1173,13 +1173,13 @@ private:
 };
 
 
-class BinaryComparasionPredicateAdapter :
-        public AdapterT<BinaryComparasionPredicateCBH>,
+class BinaryComparisonPredicateAdapter :
+        public AdapterT<BinaryComparisonPredicateCBH>,
         public ExpressionAtomPredicateCBH,
         public ComparisonOperatorCBH {
 public:
-    BinaryComparasionPredicateAdapter(shared_ptr<BinaryComparasionPredicateCBH> const & parent,
-            QSMySqlParser::BinaryComparasionPredicateContext* ctx)
+    BinaryComparisonPredicateAdapter(shared_ptr<BinaryComparisonPredicateCBH> const & parent,
+            QSMySqlParser::BinaryComparisonPredicateContext* ctx)
     : AdapterT(parent)
     , _ctx(ctx)
     {}
@@ -1230,14 +1230,14 @@ public:
 
         compPredicate->right = _right;
 
-        lockedParent()->handleBinaryComparasionPredicate(compPredicate);
+        lockedParent()->handleBinaryComparisonPredicate(compPredicate);
     }
 
 private:
     shared_ptr<query::ValueExpr> _left;
     string _comparison;
     shared_ptr<query::ValueExpr> _right;
-    QSMySqlParser::BinaryComparasionPredicateContext* _ctx;
+    QSMySqlParser::BinaryComparisonPredicateContext* _ctx;
 };
 
 
@@ -2495,7 +2495,7 @@ IGNORED(StringLiteral)
 ENTER_EXIT_PARENT(PredicateExpression)
 ENTER_EXIT_PARENT(ExpressionAtomPredicate)
 ENTER_EXIT_PARENT(QservFunctionSpec)
-ENTER_EXIT_PARENT(BinaryComparasionPredicate)
+ENTER_EXIT_PARENT(BinaryComparisonPredicate)
 ENTER_EXIT_PARENT(ConstantExpressionAtom)
 ENTER_EXIT_PARENT(FullColumnNameExpressionAtom)
 ENTER_EXIT_PARENT(ComparisonOperator)
@@ -2969,7 +2969,7 @@ IGNORED(QservFunctionSpecExpression)
 ENTER_EXIT_PARENT(LogicalExpression)
 UNHANDLED(SoundsLikePredicate)
 ENTER_EXIT_PARENT(InPredicate)
-UNHANDLED(SubqueryComparasionPredicate)
+UNHANDLED(SubqueryComparisonPredicate)
 ENTER_EXIT_PARENT(BetweenPredicate)
 UNHANDLED(IsNullPredicate)
 ENTER_EXIT_PARENT(LikePredicate)

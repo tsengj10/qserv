@@ -1551,14 +1551,14 @@ protected:
     virtual void enterInPredicate(QSMySqlParser::InPredicateContext * /*ctx*/) override;
     virtual void exitInPredicate(QSMySqlParser::InPredicateContext * /*ctx*/) override;
 
-    virtual void enterSubqueryComparasionPredicate(QSMySqlParser::SubqueryComparasionPredicateContext * /*ctx*/) override;
-    virtual void exitSubqueryComparasionPredicate(QSMySqlParser::SubqueryComparasionPredicateContext * /*ctx*/) override;
+    virtual void enterSubqueryComparisonPredicate(QSMySqlParser::SubqueryComparisonPredicateContext * /*ctx*/) override;
+    virtual void exitSubqueryComparisonPredicate(QSMySqlParser::SubqueryComparisonPredicateContext * /*ctx*/) override;
 
     virtual void enterBetweenPredicate(QSMySqlParser::BetweenPredicateContext * /*ctx*/) override;
     virtual void exitBetweenPredicate(QSMySqlParser::BetweenPredicateContext * /*ctx*/) override;
 
-    virtual void enterBinaryComparasionPredicate(QSMySqlParser::BinaryComparasionPredicateContext * /*ctx*/) override;
-    virtual void exitBinaryComparasionPredicate(QSMySqlParser::BinaryComparasionPredicateContext * /*ctx*/) override;
+    virtual void enterBinaryComparisonPredicate(QSMySqlParser::BinaryComparisonPredicateContext * /*ctx*/) override;
+    virtual void exitBinaryComparisonPredicate(QSMySqlParser::BinaryComparisonPredicateContext * /*ctx*/) override;
 
     virtual void enterIsNullPredicate(QSMySqlParser::IsNullPredicateContext * /*ctx*/) override;
     virtual void exitIsNullPredicate(QSMySqlParser::IsNullPredicateContext * /*ctx*/) override;

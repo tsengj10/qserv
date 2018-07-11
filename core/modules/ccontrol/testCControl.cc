@@ -46,6 +46,11 @@ using namespace lsst::qserv;
 BOOST_AUTO_TEST_SUITE(Suite)
 
 static const std::vector< std::string > QUERIES = {
+    "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = 430213989148129 AND scisql_angSep(v.ra_PS, v.decl_PS, o.ra_PS, o.decl_PS) < 0.016 AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case01/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+    //"SELECT offset, mjdRef, drift FROM LeapSeconds WHERE whenUtc = ( SELECT MAX(whenUtc) FROM LeapSeconds WHERE whenUtc <=  NAME_CONST('nsecs_',39900600000000000000000000) )", // case01/queries/0010_leapSec.sql.FIXME
+};
+
+static const std::vector< std::string > FIXED_QUERIES = {
     "SELECT objectId,iauId,ra_PS,ra_PS_Sigma,decl_PS,decl_PS_Sigma,radecl_PS_Cov,htmId20,ra_SG,ra_SG_Sigma,decl_SG,decl_SG_Sigma, radecl_SG_Cov,raRange,declRange,muRa_PS,muRa_PS_Sigma,muDecl_PS,muDecl_PS_Sigma,muRaDecl_PS_Cov,parallax_PS, parallax_PS_Sigma,canonicalFilterId,extendedness,varProb,earliestObsTime,latestObsTime,meanObsTime,flags,uNumObs, uExtendedness,uVarProb,uRaOffset_PS,uRaOffset_PS_Sigma,uDeclOffset_PS,uDeclOffset_PS_Sigma,uRaDeclOffset_PS_Cov, uRaOffset_SG,uRaOffset_SG_Sigma,uDeclOffset_SG,uDeclOffset_SG_Sigma,uRaDeclOffset_SG_Cov,uLnL_PS,uLnL_SG,uFlux_PS, uFlux_PS_Sigma,uFlux_ESG,uFlux_ESG_Sigma,uFlux_Gaussian,uFlux_Gaussian_Sigma,uTimescale,uEarliestObsTime,uLatestObsTime, uSersicN_SG,uSersicN_SG_Sigma,uE1_SG,uE1_SG_Sigma,uE2_SG,uE2_SG_Sigma,uRadius_SG,uRadius_SG_Sigma,uFlags,gNumObs, gExtendedness,gVarProb,gRaOffset_PS,gRaOffset_PS_Sigma,gDeclOffset_PS,gDeclOffset_PS_Sigma,gRaDeclOffset_PS_Cov, gRaOffset_SG,gRaOffset_SG_Sigma,gDeclOffset_SG,gDeclOffset_SG_Sigma,gRaDeclOffset_SG_Cov,gLnL_PS,gLnL_SG,gFlux_PS, gFlux_PS_Sigma,gFlux_ESG,gFlux_ESG_Sigma,gFlux_Gaussian,gFlux_Gaussian_Sigma,gTimescale,gEarliestObsTime, gLatestObsTime,gSersicN_SG,gSersicN_SG_Sigma,gE1_SG,gE1_SG_Sigma,gE2_SG,gE2_SG_Sigma,gRadius_SG,gRadius_SG_Sigma, gFlags,rNumObs,rExtendedness,rVarProb,rRaOffset_PS,rRaOffset_PS_Sigma,rDeclOffset_PS,rDeclOffset_PS_Sigma, rRaDeclOffset_PS_Cov,rRaOffset_SG,rRaOffset_SG_Sigma,rDeclOffset_SG,rDeclOffset_SG_Sigma,rRaDeclOffset_SG_Cov,rLnL_PS, rLnL_SG,rFlux_PS,rFlux_PS_Sigma,rFlux_ESG,rFlux_ESG_Sigma,rFlux_Gaussian,rFlux_Gaussian_Sigma,rTimescale, rEarliestObsTime,rLatestObsTime,rSersicN_SG,rSersicN_SG_Sigma,rE1_SG,rE1_SG_Sigma,rE2_SG,rE2_SG_Sigma,rRadius_SG, rRadius_SG_Sigma,rFlags,iNumObs,iExtendedness,iVarProb,iRaOffset_PS,iRaOffset_PS_Sigma,iDeclOffset_PS, iDeclOffset_PS_Sigma,iRaDeclOffset_PS_Cov,iRaOffset_SG,iRaOffset_SG_Sigma,iDeclOffset_SG,iDeclOffset_SG_Sigma, iRaDeclOffset_SG_Cov,iLnL_PS,iLnL_SG,iFlux_PS,iFlux_PS_Sigma,iFlux_ESG,iFlux_ESG_Sigma,iFlux_Gaussian, iFlux_Gaussian_Sigma,iTimescale,iEarliestObsTime,iLatestObsTime,iSersicN_SG,iSersicN_SG_Sigma,iE1_SG,iE1_SG_Sigma, iE2_SG,iE2_SG_Sigma,iRadius_SG,iRadius_SG_Sigma,iFlags,zNumObs,zExtendedness,zVarProb,zRaOffset_PS,zRaOffset_PS_Sigma, zDeclOffset_PS,zDeclOffset_PS_Sigma,zRaDeclOffset_PS_Cov,zRaOffset_SG,zRaOffset_SG_Sigma,zDeclOffset_SG, zDeclOffset_SG_Sigma,zRaDeclOffset_SG_Cov,zLnL_PS,zLnL_SG,zFlux_PS,zFlux_PS_Sigma,zFlux_ESG,zFlux_ESG_Sigma, zFlux_Gaussian,zFlux_Gaussian_Sigma,zTimescale,zEarliestObsTime,zLatestObsTime,zSersicN_SG,zSersicN_SG_Sigma,zE1_SG, zE1_SG_Sigma,zE2_SG,zE2_SG_Sigma,zRadius_SG,zRadius_SG_Sigma,zFlags,yNumObs,yExtendedness,yVarProb,yRaOffset_PS, yRaOffset_PS_Sigma,yDeclOffset_PS,yDeclOffset_PS_Sigma,yRaDeclOffset_PS_Cov,yRaOffset_SG,yRaOffset_SG_Sigma, yDeclOffset_SG,yDeclOffset_SG_Sigma,yRaDeclOffset_SG_Cov,yLnL_PS,yLnL_SG,yFlux_PS,yFlux_PS_Sigma,yFlux_ESG, yFlux_ESG_Sigma,yFlux_Gaussian,yFlux_Gaussian_Sigma,yTimescale,yEarliestObsTime,yLatestObsTime,ySersicN_SG, ySersicN_SG_Sigma,yE1_SG,yE1_SG_Sigma,yE2_SG,yE2_SG_Sigma,yRadius_SG,yRadius_SG_Sigma,yFlags FROM   Object WHERE  objectId = 430213989148129", // case01/queries/0001.1_fetchObjectById.sql
     "select ra_Ps, decl_PS FROM Object WHERE objectId IN (390034570102582, 396210733076852, 393126946553816, 390030275138483)", // case01/queries/0001.2_fetchObjectByIdIN.sql
     "SELECT objectId,iauId,ra_PS,ra_PS_Sigma,decl_PS,decl_PS_Sigma,radecl_PS_Cov,htmId20,ra_SG,ra_SG_Sigma,decl_SG,decl_SG_Sigma, radecl_SG_Cov,raRange,declRange,muRa_PS,muRa_PS_Sigma,muDecl_PS,muDecl_PS_Sigma,muRaDecl_PS_Cov,parallax_PS, parallax_PS_Sigma,canonicalFilterId,extendedness,varProb,earliestObsTime,latestObsTime,meanObsTime,flags,uNumObs, uExtendedness,uVarProb,uRaOffset_PS,uRaOffset_PS_Sigma,uDeclOffset_PS,uDeclOffset_PS_Sigma,uRaDeclOffset_PS_Cov, uRaOffset_SG,uRaOffset_SG_Sigma,uDeclOffset_SG,uDeclOffset_SG_Sigma,uRaDeclOffset_SG_Cov,uLnL_PS,uLnL_SG,uFlux_PS, uFlux_PS_Sigma,uFlux_ESG,uFlux_ESG_Sigma,uFlux_Gaussian,uFlux_Gaussian_Sigma,uTimescale,uEarliestObsTime,uLatestObsTime, uSersicN_SG,uSersicN_SG_Sigma,uE1_SG,uE1_SG_Sigma,uE2_SG,uE2_SG_Sigma,uRadius_SG,uRadius_SG_Sigma,uFlags,gNumObs, gExtendedness,gVarProb,gRaOffset_PS,gRaOffset_PS_Sigma,gDeclOffset_PS,gDeclOffset_PS_Sigma,gRaDeclOffset_PS_Cov, gRaOffset_SG,gRaOffset_SG_Sigma,gDeclOffset_SG,gDeclOffset_SG_Sigma,gRaDeclOffset_SG_Cov,gLnL_PS,gLnL_SG,gFlux_PS, gFlux_PS_Sigma,gFlux_ESG,gFlux_ESG_Sigma,gFlux_Gaussian,gFlux_Gaussian_Sigma,gTimescale,gEarliestObsTime, gLatestObsTime,gSersicN_SG,gSersicN_SG_Sigma,gE1_SG,gE1_SG_Sigma,gE2_SG,gE2_SG_Sigma,gRadius_SG,gRadius_SG_Sigma, gFlags,rNumObs,rExtendedness,rVarProb,rRaOffset_PS,rRaOffset_PS_Sigma,rDeclOffset_PS,rDeclOffset_PS_Sigma, rRaDeclOffset_PS_Cov,rRaOffset_SG,rRaOffset_SG_Sigma,rDeclOffset_SG,rDeclOffset_SG_Sigma,rRaDeclOffset_SG_Cov,rLnL_PS, rLnL_SG,rFlux_PS,rFlux_PS_Sigma,rFlux_ESG,rFlux_ESG_Sigma,rFlux_Gaussian,rFlux_Gaussian_Sigma,rTimescale, rEarliestObsTime,rLatestObsTime,rSersicN_SG,rSersicN_SG_Sigma,rE1_SG,rE1_SG_Sigma,rE2_SG,rE2_SG_Sigma,rRadius_SG, rRadius_SG_Sigma,rFlags,iNumObs,iExtendedness,iVarProb,iRaOffset_PS,iRaOffset_PS_Sigma,iDeclOffset_PS, iDeclOffset_PS_Sigma,iRaDeclOffset_PS_Cov,iRaOffset_SG,iRaOffset_SG_Sigma,iDeclOffset_SG,iDeclOffset_SG_Sigma, iRaDeclOffset_SG_Cov,iLnL_PS,iLnL_SG,iFlux_PS,iFlux_PS_Sigma,iFlux_ESG,iFlux_ESG_Sigma,iFlux_Gaussian, iFlux_Gaussian_Sigma,iTimescale,iEarliestObsTime,iLatestObsTime,iSersicN_SG,iSersicN_SG_Sigma,iE1_SG,iE1_SG_Sigma, iE2_SG,iE2_SG_Sigma,iRadius_SG,iRadius_SG_Sigma,iFlags,zNumObs,zExtendedness,zVarProb,zRaOffset_PS,zRaOffset_PS_Sigma, zDeclOffset_PS,zDeclOffset_PS_Sigma,zRaDeclOffset_PS_Cov,zRaOffset_SG,zRaOffset_SG_Sigma,zDeclOffset_SG, zDeclOffset_SG_Sigma,zRaDeclOffset_SG_Cov,zLnL_PS,zLnL_SG,zFlux_PS,zFlux_PS_Sigma,zFlux_ESG,zFlux_ESG_Sigma, zFlux_Gaussian,zFlux_Gaussian_Sigma,zTimescale,zEarliestObsTime,zLatestObsTime,zSersicN_SG,zSersicN_SG_Sigma,zE1_SG, zE1_SG_Sigma,zE2_SG,zE2_SG_Sigma,zRadius_SG,zRadius_SG_Sigma,zFlags,yNumObs,yExtendedness,yVarProb,yRaOffset_PS, yRaOffset_PS_Sigma,yDeclOffset_PS,yDeclOffset_PS_Sigma,yRaDeclOffset_PS_Cov,yRaOffset_SG,yRaOffset_SG_Sigma, yDeclOffset_SG,yDeclOffset_SG_Sigma,yRaDeclOffset_SG_Cov,yLnL_PS,yLnL_SG,yFlux_PS,yFlux_PS_Sigma,yFlux_ESG, yFlux_ESG_Sigma,yFlux_Gaussian,yFlux_Gaussian_Sigma,yTimescale,yEarliestObsTime,yLatestObsTime,ySersicN_SG, ySersicN_SG_Sigma,yE1_SG,yE1_SG_Sigma,yE2_SG,yE2_SG_Sigma,yRadius_SG,yRadius_SG_Sigma,yFlags, varBinaryField FROM   Object WHERE  objectId = 430213989148129", // case01/queries/0001.3_fetchObjectByIdSelectVARBINARY.sql
@@ -281,99 +286,241 @@ static const std::vector< std::string > QUERIES = {
 
     // case05/queries/1051_nn.sql.FIXME
     "SELECT o1.objectId AS objId1, o2.objectId AS objId2, scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) AS distance FROM Object o1, Object o2 WHERE qserv_areaspec_box(0, 0, 0.2, 1) AND scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) < 1 AND o1.objectId <> o2.objectId",
+
+    // modified queries: see FAIL_QUERIES for notes on how fixed
+
+    "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = 430213989148129 AND scisql_angSep(v.ra_PS, v.decl_PS, o.ra_PS, o.decl_PS) < 0.016 AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case01/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
+    "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = 430213989148129 AND scisql_angSep(v.ra_PS, v.decl_PS, o.ra_PS, o.decl_PS) < 0.016 AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case02/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
+    "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = 430213989148129 AND scisql_angSep(v.ra_PS, v.decl_PS, o.ra_PS, o.decl_PS) < 0.016 AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case05/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
+    "SELECT objectId FROM   Object WHERE qserv_areaspec_box(0.1, -6, 4, 6) AND    extendedParameter > 0.8", // case01/queries/1005_allGalaxiesInArea.sql.FIXME
+
+    "SELECT objectId FROM   Object WHERE qserv_areaspec_box(0.1, -6, 4, 6) AND    extendedParameter > 0.8", // case02/queries/1005_allGalaxiesInArea.sql.FIXME
+
+    "SELECT objectId FROM   Object WHERE qserv_areaspec_box(0.1, -6, 4, 6) AND    extendedParameter > 0.8", // case05/queries/1005_allGalaxiesInArea.sql.FIXME
+ 
+};
+
+// These queries seem to parse for antlr4, but antlr2 fails so can't be compared
+static const std::vector< std::string > FAIL_A2_QUERIES = {
+    "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN 1 AND 2", // case01/queries/1031_newTransientsForEpoch.sql.FIXME
+
+    "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN 1 AND 2", // case02/queries/1031_newTransientsForEpoch.sql.FIXME
+
+    "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN 1 AND 2", // case05/queries/1031_newTransientsForEpoch.sql.FIXME
+
+    "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case01/queries/1012_orderByClause.sql.FIXME
+
+    "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case02/queries/1012_orderByClause.sql.FIXME
+
+    "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case05/queries/1012_orderByClause.sql.FIXME
+
+    "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case01/queries/1013_orderByClauseRounded.sql.FIXME
+
+    "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case02/queries/1013_orderByClauseRounded.sql.FIXME
+
+    "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case05/queries/1013_orderByClauseRounded.sql.FIXME
 };
 
 // These queries are all marked "FIXME" in the integration tests, and we don't test them (yet).
 static const std::vector< std::string > FAIL_QUERIES = {
+
+    // Fixed. :objectId replaced with a value, and spDist replaced with scisql_angSep condition.
     "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = :objectId AND spDist(v.ra, v.decl, o.ra, o.decl, :dist) AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case01/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
     "SELECT offset, mjdRef, drift FROM LeapSeconds WHERE whenUtc = ( SELECT MAX(whenUtc) FROM LeapSeconds WHERE whenUtc <=  NAME_CONST('nsecs_',39900600000000000000000000) )", // case01/queries/0010_leapSec.sql.FIXME
+
+    // Failed antlr2. Also possibly hung on parsing NAME_CONST scalarFunctionCall.
     "SELECT sdqa_metricId FROM   sdqa_Metric WHERE  metricName = NAME_CONST('metricName_',_latin1'ip.isr.numSaturatedPixels' COLLATE 'latin1_swedish_ci')", // case01/queries/0011_sdqaMetric.sql.FIXME
+
+    // Fixed. :raMin, :declMin, :raMax, :declMax replaced with values.
     "SELECT objectId FROM   Object WHERE qserv_areaspec_box(:raMin, :declMin, :raMax, :declMax) AND    extendedParameter > 0.8", // case01/queries/1005_allGalaxiesInArea.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case01/queries/1012_orderByClause.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case01/queries/1013_orderByClauseRounded.sql.FIXME
+
+    // Fixed for antlr4. :timeMin and :timeMax replaced with values. Does not parse in antlr2.
     "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN :timeMin AND :timeMax", // case01/queries/1031_newTransientsForEpoch.sql.FIXME
+
     "SELECT DISTINCT o1.objectId, o2.objectId FROM   Object o1, Object o2 WHERE  scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) < 1 AND  o1.objectId <> o2.objectId AND  ABS( (scisql_fluxToAbMag(o1.gFlux_PS)-scisql_fluxToAbMag(o1.rFlux_PS)) - (scisql_fluxToAbMag(o2.gFlux_PS)-scisql_fluxToAbMag(o2.rFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.rFlux_PS)-scisql_fluxToAbMag(o1.iFlux_PS)) - (scisql_fluxToAbMag(o2.rFlux_PS)-scisql_fluxToAbMag(o2.iFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.iFlux_PS)-scisql_fluxToAbMag(o1.zFlux_PS)) - (scisql_fluxToAbMag(o2.iFlux_PS)-scisql_fluxToAbMag(o2.zFlux_PS)) ) < 1", // case01/queries/1052_nnSimilarColors.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(300, 2, 0.01, 2, 0.03, 2.6,  359.9, 2.6); CALL scisql.scisql_s2CPolyRegion(@poly, 20); SELECT refObjectId, isStar, ra, decl, rMag FROM SimRefObject AS sro INNER JOIN scisql.Region AS r ON (sro.htmId20 BETWEEN r.htmMin AND r.htmMax) WHERE scisql_s2PtInCPoly(ra, decl, @poly) = 1;", // case01/queries/1070_areaUsingPoly.sql.FIXME
+
     "SELECT count(*) FROM   Object o INNER JOIN RefObjMatch o2t ON (o.objectId = o2t.objectId) LEFT  JOIN SimRefObject t ON (o2t.refObjectId = t.refObjectId) WHERE  closestToObj = 1 OR closestToObj is NULL", // case01/queries/1081_refMatch2.sql.FIXME
+
     "select objectId, sro.*, (sro.refObjectId-1)/2%pow(2,10) typeId from Source s join RefObjMatch rom using (objectId) join SimRefObject sro using (refObjectId) where isStar =1 limit 10", // case01/queries/1083_refMatch3.sql.FIXME
+
     "SELECT objectId, scisql_fluxToAbMag(uFlux_PS), scisql_fluxToAbMag(gFlux_PS), scisql_fluxToAbMag(rFlux_PS), scisql_fluxToAbMag(iFlux_PS), scisql_fluxToAbMag(zFlux_PS), scisql_fluxToAbMag(yFlux_PS), ra_PS, decl_PS FROM   Object WHERE  ( scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.7 OR scisql_fluxToAbMag(gFlux_PS) > 22.3 ) AND    scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.1 AND    ( scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS) < (0.08 + 0.42 * (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) - 0.96)) OR scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 1.26 ) AND    scisql_fluxToAbMag(iFlux_PS)-scisql_fluxToAbMag(zFlux_PS) < 0.8 ORDER BY objectId", // case01/queries/2001_fullObjectScan.sql.FIXME
+
     "SELECT  objectId FROM    Object WHERE   extendedParameter > 0.8 -- a star AND   uMag BETWEEN 1 AND 27  -- magnitudes are reasonable AND   gMag BETWEEN 1 AND 27 AND   rMag BETWEEN 1 AND 27 AND   iMag BETWEEN 1 AND 27 AND   zMag BETWEEN 1 AND 27 AND   yMag BETWEEN 1 AND 27 AND (                           -- and one of the colors is  different. uAmplitude > .1 + ABS(uMagSigma) OR gAmplitude > .1 + ABS(gMagSigma) OR rAmplitude > .1 + ABS(rMagSigma) OR iAmplitude > .1 + ABS(iMagSigma) OR zAmplitude > .1 + ABS(zMagSigma) OR yAmplitude > .1 + ABS(yMagSigma))", // case01/queries/2002_findStarsWithMultiMeasAndMagVariation.sql.FIXME
+
     "SELECT * FROM   Object WHERE  variability > 0.8 -- variable object AND uTimescale < :timescaleMax AND gTimescale < :timescaleMax AND rTimescale < :timescaleMax AND iTimescale < :timescaleMax AND zTimescale < :timescaleMax AND yTimescale < :timescaleMax OR primaryPeriod BETWEEN :periodMin AND :periodMax OR uAmplitude > :amplitudeMin OR gAmplitude > :amplitudeMin OR rAmplitude > :amplitudeMin OR iAmplitude > :amplitudeMin OR zAmplitude > :amplitudeMin OR yAmplitude > :amplitudeMin", // case01/queries/2003_objectWithVariabilityOrPeriodOrMag.sql.FIXME
+
     "SELECT  COUNT(*)                                               AS totalCount, SUM(CASE WHEN (typeId=3) THEN 1 ELSE 0 END)            AS galaxyCount, SUM(CASE WHEN (typeId=6) THEN 1 ELSE 0 END)            AS starCount, SUM(CASE WHEN (typeId NOT IN (3,6)) THEN 1 ELSE 0 END) AS otherCount FROM    Object JOIN    _Object2Type USING(objectId) WHERE  (uMag-gMag > 2.0 OR uMag > 22.3) AND iMag BETWEEN 0 AND 19 AND gMag - rMag > 1.0 AND ( (rMag-iMag < 0.08 + 0.42 * (gMag-rMag - 0.96)) OR (gMag-rMag > 2.26 ) ) AND iMag-zMag < 0.25", // case01/queries/2004_objectsSimilarToQuasarsWithRedshift.sql.FIXME
+
     "SELECT objectId FROM   Object JOIN   _ObjectToType USING(objectId) JOIN   ObjectType USING (typeId) WHERE  description = 'Supernova' AND  variability > 0.8 AND  probability > 0.8", // case01/queries/2005_varObjectsOfOneType.sql.FIXME
+
     "SELECT fluxToAbMag(uFlux_PS), fluxToAbMag(gFlux_PS), fluxToAbMag(rFlux_PS), fluxToAbMag(iFlux_PS), fluxToAbMag(zFlux_PS), fluxToAbMag(yFlux_PS) FROM   Object WHERE  (objectId % 100 ) = :percentage", // case01/queries/2006_randomSample.sql.FIXME
+
     "SELECT CASE gid WHEN 1 THEN 'pipeline shutdowns seen' WHEN 2 THEN 'CCDs attempted' WHEN 3 THEN 'src writes' WHEN 4 THEN 'calexp writes' END AS descr, COUNT(*) FROM ( SELECT CASE WHEN COMMENT LIKE 'Processing job:% visit=0 %' THEN 1 WHEN COMMENT LIKE 'Processing job:%' AND COMMENT NOT LIKE '% visit=0 %' THEN 2 WHEN COMMENT LIKE 'Ending write to BoostStorage%/src%' THEN 3 WHEN COMMENT LIKE 'Ending write to FitsStorage%/calexp%' THEN 4 ELSE 0 END AS gid FROM Logs ) AS stats WHERE gid > 0 GROUP BY gid", // case01/queries/2010_logs.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(359.5, -5.0, 0.05, -5.0, 0.05, 3.5, 359.5, 3.5); SELECT count(*) FROM Object where scisql_s2PtInCPoly(ra_PS, decl_PS, @poly) = 1 ;", // case01/queries/3001_SelectInPoly.sql.FIXME
+
     "SELECT count(src.sourceId), avg(o.ra_PS), avg(o.decl_PS) FROM Object o, Source src WHERE ra_PS  BETWEEN 0. AND 1. AND decl_PS BETWEEN 0. AND 1. GROUP BY src.objectId ;", // case01/queries/3007_countGroupBy.sql.FIXME
+
+    // administrationStatement current ignored (not implemented in antlr4. Also seems not to work in antlr2)
     "SHOW COLUMNS FROM Object;", // case01/queries/3008_showColumns.sql.FIXME
+
     "SELECT src.sourceId FROM Source src WHERE src.objectId IN ( SELECT objectId FROM Object o WHERE ra_PS  BETWEEN 0. AND 1. AND decl_PS BETWEEN 0. AND 1. ) ;", // case01/queries/3009_subquery.sql.FIXME
+
     "SELECT o.objectId,src.*,src.sourceId%pow(2,10) FROM Object o, Source src WHERE o.ra_PS  BETWEEN 0. AND 1. AND o.decl_PS BETWEEN 0. AND 1. AND o.objectId = src.objectId ;", // case01/queries/3010_selectWithComputation.sql.FIXME
+
     "SELECT uFlux_PS, gFlux_PS, rFlux_PS, iFlux_PS, zFlux_PS, yFlux_PS FROM   Object WHERE  (objectId % 100 ) = 57 ;", // case01/queries/3011_selectSample.sql.FIXME
+
     "SELECT o1.objectId, o2.objectId FROM   Object o1, Object o2 WHERE  scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) < 1 AND  o1.objectId <> o2.objectId AND  ABS( (scisql_fluxToAbMag(o1.gFlux_PS)-scisql_fluxToAbMag(o1.rFlux_PS)) - (scisql_fluxToAbMag(o2.gFlux_PS)-scisql_fluxToAbMag(o2.rFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.rFlux_PS)-scisql_fluxToAbMag(o1.iFlux_PS)) - (scisql_fluxToAbMag(o2.rFlux_PS)-scisql_fluxToAbMag(o2.iFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.iFlux_PS)-scisql_fluxToAbMag(o1.zFlux_PS)) - (scisql_fluxToAbMag(o2.iFlux_PS)-scisql_fluxToAbMag(o2.zFlux_PS)) ) < 1", // case01/queries/3012_similarObject.sql.FIXME
+
     "SELECT objectID FROM Object WHERE scisql_fluxToAbMag(zFlux_PS) BETWEEN 20 AND 24 ORDER BY (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))", // case01/queries/3015_orderByFunction.sql.FIXME
+
     "SELECT o1.objectId, o2.objectId FROM Object o1, Object o2 WHERE   qserv_areaspec_box(0.04, -3., 5., 3.) AND scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_Ps) < 5.", // case01/queries/3016_selectAllPairsWithinDistance.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35 .1, 6.0001);", // case01/queries/8001_badLiteral.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35. 1, 6.0001);", // case01/queries/8002_badLiteral.sql.FIXME
+
     "SELECT o1.objectId, o2.objectId FROM Object o1, Object o2 WHERE   qserv_areaspec_box(0.04, 5., -3., 3.) AND scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_Ps) < 5.", // case01/queries/8004_badArea.sql.FIXME
+
+    // Fixed. :objectId replaced with a value, and spDist replaced with scisql_angSep condition.
     "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = :objectId AND spDist(v.ra, v.decl, o.ra, o.decl, :dist) AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case02/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
+    // Fixed. :raMin, :declMin, :raMax, :declMax replaced with values.
     "SELECT objectId FROM   Object WHERE qserv_areaspec_box(:raMin, :declMin, :raMax, :declMax) AND    extendedParameter > 0.8", // case02/queries/1005_allGalaxiesInArea.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case02/queries/1012_orderByClause.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case02/queries/1013_orderByClauseRounded.sql.FIXME
+
+    // Fixed for antlr4. :timeMin and :timeMax replaced with values. Does not parse in antlr2.
     "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN :timeMin AND :timeMax", // case02/queries/1031_newTransientsForEpoch.sql.FIXME
+
     "SELECT DISTINCT o1.objectId, o2.objectId FROM   Object o1, Object o2 WHERE  scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) < 1 AND  o1.objectId <> o2.objectId AND  ABS( (scisql_fluxToAbMag(o1.gFlux_PS)-scisql_fluxToAbMag(o1.rFlux_PS)) - (scisql_fluxToAbMag(o2.gFlux_PS)-scisql_fluxToAbMag(o2.rFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.rFlux_PS)-scisql_fluxToAbMag(o1.iFlux_PS)) - (scisql_fluxToAbMag(o2.rFlux_PS)-scisql_fluxToAbMag(o2.iFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.iFlux_PS)-scisql_fluxToAbMag(o1.zFlux_PS)) - (scisql_fluxToAbMag(o2.iFlux_PS)-scisql_fluxToAbMag(o2.zFlux_PS)) ) < 1", // case02/queries/1052_nnSimilarColors.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(300, 2, 0.01, 2, 0.03, 2.6,  359.9, 2.6); CALL scisql.scisql_s2CPolyRegion(@poly, 20); SELECT refObjectId, isStar, ra, decl, rMag FROM SimRefObject AS sro INNER JOIN scisql.Region AS r ON (sro.htmId20 BETWEEN r.htmMin AND r.htmMax) WHERE scisql_s2PtInCPoly(ra, decl, @poly) = 1;", // case02/queries/1070_areaUsingPoly.sql.FIXME
+
     "SELECT count(*) FROM   Object o INNER JOIN RefObjMatch o2t ON (o.objectId = o2t.objectId) LEFT  JOIN SimRefObject t ON (o2t.refObjectId = t.refObjectId) WHERE  closestToObj = 1 OR closestToObj is NULL", // case02/queries/1081_refMatch2.sql.FIXME
+
     "select objectId, sro.*, (sro.refObjectId-1)/2%pow(2,10) typeId from Source s join RefObjMatch rom using (objectId) join SimRefObject sro using (refObjectId) where isStar =1 limit 10", // case02/queries/1083_refMatch3.sql.FIXME
+
     "SELECT objectId, scisql_fluxToAbMag(uFlux_PS), scisql_fluxToAbMag(gFlux_PS), scisql_fluxToAbMag(rFlux_PS), scisql_fluxToAbMag(iFlux_PS), scisql_fluxToAbMag(zFlux_PS), scisql_fluxToAbMag(yFlux_PS), ra_PS, decl_PS FROM   Object WHERE  ( scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.7 OR scisql_fluxToAbMag(gFlux_PS) > 22.3 ) AND    scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.1 AND    ( scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS) < (0.08 + 0.42 * (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) - 0.96)) OR scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 1.26 ) AND    scisql_fluxToAbMag(iFlux_PS)-scisql_fluxToAbMag(zFlux_PS) < 0.8", // case02/queries/2001_fullObjectScan.sql.FIXME
+
     "SELECT  objectId FROM    Object WHERE   extendedParameter > 0.8 -- a star AND   uMag BETWEEN 1 AND 27  -- magnitudes are reasonable AND   gMag BETWEEN 1 AND 27 AND   rMag BETWEEN 1 AND 27 AND   iMag BETWEEN 1 AND 27 AND   zMag BETWEEN 1 AND 27 AND   yMag BETWEEN 1 AND 27 AND (                           -- and one of the colors is  different. uAmplitude > .1 + ABS(uMagSigma) OR gAmplitude > .1 + ABS(gMagSigma) OR rAmplitude > .1 + ABS(rMagSigma) OR iAmplitude > .1 + ABS(iMagSigma) OR zAmplitude > .1 + ABS(zMagSigma) OR yAmplitude > .1 + ABS(yMagSigma))", // case02/queries/2002_findStarsWithMultiMeasAndMagVariation.sql.FIXME
+
     "SELECT * FROM   Object WHERE  variability > 0.8 -- variable object AND uTimescale < :timescaleMax AND gTimescale < :timescaleMax AND rTimescale < :timescaleMax AND iTimescale < :timescaleMax AND zTimescale < :timescaleMax AND yTimescale < :timescaleMax OR primaryPeriod BETWEEN :periodMin AND :periodMax OR uAmplitude > :amplitudeMin OR gAmplitude > :amplitudeMin OR rAmplitude > :amplitudeMin OR iAmplitude > :amplitudeMin OR zAmplitude > :amplitudeMin OR yAmplitude > :amplitudeMin", // case02/queries/2003_objectWithVariabilityOrPeriodOrMag.sql.FIXME
+
     "SELECT  COUNT(*)                                               AS totalCount, SUM(CASE WHEN (typeId=3) THEN 1 ELSE 0 END)            AS galaxyCount, SUM(CASE WHEN (typeId=6) THEN 1 ELSE 0 END)            AS starCount, SUM(CASE WHEN (typeId NOT IN (3,6)) THEN 1 ELSE 0 END) AS otherCount FROM    Object JOIN    _Object2Type USING(objectId) WHERE  (uMag-gMag > 2.0 OR uMag > 22.3) AND iMag BETWEEN 0 AND 19 AND gMag - rMag > 1.0 AND ( (rMag-iMag < 0.08 + 0.42 * (gMag-rMag - 0.96)) OR (gMag-rMag > 2.26 ) ) AND iMag-zMag < 0.25", // case02/queries/2004_objectsSimilarToQuasarsWithRedshift.sql.FIXME
+
     "SELECT objectId FROM   Object JOIN   _ObjectToType USING(objectId) JOIN   ObjectType USING (typeId) WHERE  description = 'Supernova' AND  variability > 0.8 AND  probability > 0.8", // case02/queries/2005_varObjectsOfOneType.sql.FIXME
+
     "SELECT fluxToAbMag(uFlux_PS), fluxToAbMag(gFlux_PS), fluxToAbMag(rFlux_PS), fluxToAbMag(iFlux_PS), fluxToAbMag(zFlux_PS), fluxToAbMag(yFlux_PS) FROM   Object WHERE  (objectId % 100 ) = :percentage", // case02/queries/2006_randomSample.sql.FIXME
+
     "SELECT CASE gid WHEN 1 THEN 'pipeline shutdowns seen' WHEN 2 THEN 'CCDs attempted' WHEN 3 THEN 'src writes' WHEN 4 THEN 'calexp writes' END AS descr, COUNT(*) FROM ( SELECT CASE WHEN COMMENT LIKE 'Processing job:% visit=0 %' THEN 1 WHEN COMMENT LIKE 'Processing job:%' AND COMMENT NOT LIKE '% visit=0 %' THEN 2 WHEN COMMENT LIKE 'Ending write to BoostStorage%/src%' THEN 3 WHEN COMMENT LIKE 'Ending write to FitsStorage%/calexp%' THEN 4 ELSE 0 END AS gid FROM Logs ) AS stats WHERE gid > 0 GROUP BY gid", // case02/queries/2010_logs.sql.FIXME
+
     "SELECT objectId, ra_PS, decl_PS FROM   Object WHERE  ( scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS) - (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))/4 - 0.18 ) BETWEEN -0.2 AND 0.2 AND  ( ( (scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS)) - (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))/4 - 0.18 ) > (0.45 - 4*(scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))) )", // case02/queries/3002_query_030.sql.FIXME
+
     "SELECT DISTINCT o1.objectId, o1.ra_PS, o1.decl_PS, o2.iauId FROM   Object o1, Object o2 WHERE  ABS(o2.ra_PS   - o1.ra_PS  ) < o2.raRange/(2*COS(RADIANS(o1.decl_PS))) AND ABS(o2.decl_PS - o1.decl_PS) < o2.declRange/2 AND ( SELECT COUNT(o3.objectId) FROM   Object o3 WHERE  o1.objectId <> o3.objectId AND  ABS(o1.ra_PS   - o3.ra_PS  ) < 0.1/COS(RADIANS(o3.decl_PS)) AND  ABS(o1.decl_PS - o3.decl_PS) < 0.1 ) > 1000", // case02/queries/3003_query_025.sql.FIXME
+
     "SELECT * FROM Object qserv_areaspec_box(1,3,2,4) LIMIT 10", // case02/queries/3020_selectObjectWithLimit.sql.FIXME
+
     "SELECT o1.objectId, o2.objectId FROM Object o1, Object o2 WHERE   qserv_areaspec_box(0.04, 5., -3., 3.) AND scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_Ps) < 5.", // case02/queries/3022_selectAllPairsWithinSomeDistanceOfPointsInRegion.sql.FIXME
+
     "SELECT objectId, taiMidPoint, fluxToAbMag(psfMag) FROM   Source JOIN   Object USING(objectId) JOIN   Filter USING(filterId) qserv_areaspec_box(1,3,2,4) AND  filterName = 'u' AND  variability BETWEEN 0 AND 2 ORDER BY objectId, taiMidPoint", // case02/queries/3023_joinObjectSourceFilter.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35 .1, 6.0001);", // case02/queries/8001_badLiteral.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35. 1, 6.0001);", // case02/queries/8002_badLiteral.sql.FIXME
+
     "SHOW COLUMNS FROM DeepSource;", // case03/queries/0001_showColumnsFromSource.sql.FIXME
+
     "SHOW COLUMNS FROM RefObject;", // case03/queries/0005_showColumnsFromRefObject.sql.FIXME
+
     "SELECT scisql_s2CPolyToBin(54.96, -0.64, 55.12, -0.64, 55.12, -0.41, 54.96, -0.41) FROM   Science_Ccd_Exposure AS sce WHERE  (sce.filterName = 'g') AND (sce.field = 670) AND (sce.camcol = 2) AND (sce.run = 7202) INTO @poly;", // case03/queries/0007_selectExposureWithPoly.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(54.9, -1.25, 55.0, -1.25, 55.0, -0.75, 54.9, -0.75); SELECT sro.refObjectId, sro.isStar, sro.ra, sro.decl, sro.uMag, sro.gMag, sro.rMag, sro.iMag, sro.zMag FROM   RefObject AS sro WHERE  (scisql_s2PtInCPoly(sro.ra, sro.decl, @poly) = 1);", // case03/queries/0008_selectRefObjectInPoly.sql.FIXME
+
     "SELECT scisql_s2CPolyToBin(sce.corner1Ra, sce.corner1Decl, sce.corner2Ra, sce.corner2Decl, sce.corner3Ra, sce.corner3Decl, sce.corner4Ra, sce.corner4Decl) FROM   DeepCoadd AS sce WHERE  (sce.filterName = 'g') AND (sce.tract = 0) AND (sce.patch = '159,1') INTO @poly;", // case03/queries/0016_selectDeepCoaddInPoly.sql.FIXME
+
     "SELECT sro.refObjectId, sro.isStar, sro.ra, sro.decl, sro.uMag, sro.gMag, sro.rMag, sro.iMag, sro.zMag FROM   RefObject AS sro WHERE  (scisql_s2PtInCPoly(sro.ra, sro.decl, @poly) = 1);", // case03/queries/0017_selectRefObjectInPoly.sql.FIXME
+
     "SHOW COLUMNS FROM DeepForcedSource;", // case03/queries/0020_showColumnsFromDeepforcedsource.sql.FIXME
+
     "SELECT scisql_s2CPolyToBin(sce.corner1Ra, sce.corner1Decl, sce.corner2Ra, sce.corner2Decl, sce.corner3Ra, sce.corner3Decl, sce.corner4Ra, sce.corner4Decl) FROM   Science_Ccd_Exposure AS sce WHERE  (sce.filterName = 'g') AND (sce.field = 535) AND (sce.camcol = 1) AND (sce.run = 94) INTO @poly;", // case03/queries/0026_selectScienceCCDExposureInPoly.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(54.9, -1.25, 55.0, -1.25, 55.0, -0.75, 54.9, -0.75); SELECT sro.refObjectId, sro.isStar, sro.ra, sro.decl, sro.uMag, sro.gMag, sro.rMag, sro.iMag, sro.zMag FROM   RefObject AS sro WHERE  (scisql_s2PtInCPoly(sro.ra, sro.decl, @poly) = 1) ;", // case03/queries/0027_selectRefObjectInPoly.sql.FIXME
+
     "SELECT sce.filterName, sce.field, sce.camcol, sce.run, sro.gMag, sro.ra, sro.decl, sro.isStar, sro.refObjectId, s.deepSourceId,  rom.nSrcMatches,s.ra, s.decl, s.x, s.y, s.psfFlux, s.psfFluxSigma, s.apFlux, s.apFluxSigma, s.modelFlux, s.modelFluxSigma, s.instFlux, s.instFluxSigma, s.shapeIxx, s.shapeIyy, s.shapeIxy, s.flagPixInterpCen, s.flagNegative, s.flagPixEdge, s.flagBadCentroid, s.flagPixSaturCen, s.extendedness FROM   DeepForcedSource AS s, Science_Ccd_Exposure AS sce use index(), RefDeepSrcMatch AS rom, RefObject AS sro WHERE  (s.scienceCcdExposureId = sce.scienceCcdExposureId) AND (s.deepSourceId = rom.deepSourceId) AND (rom.refObjectId = sro.refObjectId) AND (sce.filterName = 'g') AND (sce.field = 794) AND (sce.camcol = 1) AND (sce.run = 5924);", // case03/queries/0029_selectDeepforcedsourceScienceCCDExposureRefdeepsrcmatchRefobject.sql.FIXME
+
     "SHOW COLUMNS FROM DeepSource;", // case04/queries/0001_showColumnsFromSource.sql.FIXME
+
      //this gets intercepted before the antlr4 parse and processed locally; per the logs: "(qserv/mysqlProxy.lua:476) - Intercepted: SHOW COLUMNS FROM DeepForcedSource"
     "SHOW COLUMNS FROM DeepForcedSource;", // case04/queries/0020_showColumnsFromDeepForcedSource.sql
+
+    // Fixed. :objectId replaced with a value, and spDist replaced with scisql_angSep condition.
     "SELECT v.objectId, v.ra, v.decl FROM   Object v, Object o WHERE  o.objectId = :objectId AND spDist(v.ra, v.decl, o.ra, o.decl, :dist) AND v.variability > 0.8 AND o.extendedParameter > 0.8", // case05/queries/0006_transientVarObjNearGalaxy.sql.FIXME
+
+    // Fixed. :raMin, :declMin, :raMax, :declMax replaced with values.
     "SELECT objectId FROM   Object WHERE qserv_areaspec_box(:raMin, :declMin, :raMax, :declMax) AND    extendedParameter > 0.8", // case05/queries/1005_allGalaxiesInArea.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, iE1_SG, ABS(iE1_SG) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ABS(iE1_SG);", // case05/queries/1012_orderByClause.sql.FIXME
+
+    // antlr4 parses, antlr2 doesn't
     "SELECT objectId, ROUND(iE1_SG, 3), ROUND(ABS(iE1_SG), 3) FROM Object WHERE iE1_SG between -0.1 and 0.1 ORDER BY ROUND(ABS(iE1_SG), 3);", // case05/queries/1013_orderByClauseRounded.sql.FIXME
+
+    // Fixed for antlr4. :timeMin and :timeMax replaced with values. Does not parse in antlr2.
     "SELECT objectId FROM   Alert JOIN   _Alert2Type USING (alertId) JOIN   AlertType USING (alertTypeId) WHERE  alertTypeDescr = 'newTransients' AND  Alert.timeGenerated BETWEEN :timeMin AND :timeMax", // case05/queries/1031_newTransientsForEpoch.sql.FIXME
+
     "SELECT DISTINCT o1.objectId, o2.objectId FROM   Object o1, Object o2 WHERE  scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_PS) < 1 AND  o1.objectId <> o2.objectId AND  ABS( (scisql_fluxToAbMag(o1.gFlux_PS)-scisql_fluxToAbMag(o1.rFlux_PS)) - (scisql_fluxToAbMag(o2.gFlux_PS)-scisql_fluxToAbMag(o2.rFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.rFlux_PS)-scisql_fluxToAbMag(o1.iFlux_PS)) - (scisql_fluxToAbMag(o2.rFlux_PS)-scisql_fluxToAbMag(o2.iFlux_PS)) ) < 1 AND  ABS( (scisql_fluxToAbMag(o1.iFlux_PS)-scisql_fluxToAbMag(o1.zFlux_PS)) - (scisql_fluxToAbMag(o2.iFlux_PS)-scisql_fluxToAbMag(o2.zFlux_PS)) ) < 1", // case05/queries/1052_nnSimilarColors.sql.FIXME
+
     "SET @poly = scisql_s2CPolyToBin(300, 2, 0.01, 2, 0.03, 2.6,  359.9, 2.6); CALL scisql.scisql_s2CPolyRegion(@poly, 20); SELECT refObjectId, isStar, ra, decl, rMag FROM SimRefObject AS sro INNER JOIN scisql.Region AS r ON (sro.htmId20 BETWEEN r.htmMin AND r.htmMax) WHERE scisql_s2PtInCPoly(ra, decl, @poly) = 1;", // case05/queries/1070_areaUsingPoly.sql.FIXME
+
     "SELECT count(*) FROM   Object o INNER JOIN RefObjMatch o2t ON (o.objectId = o2t.objectId) LEFT  JOIN SimRefObject t ON (o2t.refObjectId = t.refObjectId) WHERE  closestToObj = 1 OR closestToObj is NULL", // case05/queries/1081_refMatch2.sql.FIXME
+
     "select objectId, sro.*, (sro.refObjectId-1)/2%pow(2,10) typeId from Source s join RefObjMatch rom using (objectId) join SimRefObject sro using (refObjectId) where isStar =1 limit 10", // case05/queries/1083_refMatch3.sql.FIXME
+
     "SELECT objectId, scisql_fluxToAbMag(uFlux_PS), scisql_fluxToAbMag(gFlux_PS), scisql_fluxToAbMag(rFlux_PS), scisql_fluxToAbMag(iFlux_PS), scisql_fluxToAbMag(zFlux_PS), scisql_fluxToAbMag(yFlux_PS), ra_PS, decl_PS FROM   Object WHERE  ( scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.7 OR scisql_fluxToAbMag(gFlux_PS) > 22.3 ) AND    scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 0.1 AND    ( scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS) < (0.08 + 0.42 * (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) - 0.96)) OR scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS) > 1.26 ) AND    scisql_fluxToAbMag(iFlux_PS)-scisql_fluxToAbMag(zFlux_PS) < 0.8", // case05/queries/2001_fullObjectScan.sql.FIXME
+
     "SELECT  objectId FROM    Object WHERE   extendedParameter > 0.8 -- a star AND   uMag BETWEEN 1 AND 27  -- magnitudes are reasonable AND   gMag BETWEEN 1 AND 27 AND   rMag BETWEEN 1 AND 27 AND   iMag BETWEEN 1 AND 27 AND   zMag BETWEEN 1 AND 27 AND   yMag BETWEEN 1 AND 27 AND (                           -- and one of the colors is  different. uAmplitude > .1 + ABS(uMagSigma) OR gAmplitude > .1 + ABS(gMagSigma) OR rAmplitude > .1 + ABS(rMagSigma) OR iAmplitude > .1 + ABS(iMagSigma) OR zAmplitude > .1 + ABS(zMagSigma) OR yAmplitude > .1 + ABS(yMagSigma))", // case05/queries/2002_findStarsWithMultiMeasAndMagVariation.sql.FIXME
+
     "SELECT * FROM   Object WHERE  variability > 0.8 -- variable object AND uTimescale < :timescaleMax AND gTimescale < :timescaleMax AND rTimescale < :timescaleMax AND iTimescale < :timescaleMax AND zTimescale < :timescaleMax AND yTimescale < :timescaleMax OR primaryPeriod BETWEEN :periodMin AND :periodMax OR uAmplitude > :amplitudeMin OR gAmplitude > :amplitudeMin OR rAmplitude > :amplitudeMin OR iAmplitude > :amplitudeMin OR zAmplitude > :amplitudeMin OR yAmplitude > :amplitudeMin", // case05/queries/2003_objectWithVariabilityOrPeriodOrMag.sql.FIXME
+
     "SELECT  COUNT(*)                                               AS totalCount, SUM(CASE WHEN (typeId=3) THEN 1 ELSE 0 END)            AS galaxyCount, SUM(CASE WHEN (typeId=6) THEN 1 ELSE 0 END)            AS starCount, SUM(CASE WHEN (typeId NOT IN (3,6)) THEN 1 ELSE 0 END) AS otherCount FROM    Object JOIN    _Object2Type USING(objectId) WHERE  (uMag-gMag > 2.0 OR uMag > 22.3) AND iMag BETWEEN 0 AND 19 AND gMag - rMag > 1.0 AND ( (rMag-iMag < 0.08 + 0.42 * (gMag-rMag - 0.96)) OR (gMag-rMag > 2.26 ) ) AND iMag-zMag < 0.25", // case05/queries/2004_objectsSimilarToQuasarsWithRedshift.sql.FIXME
+
     "SELECT objectId FROM   Object JOIN   _ObjectToType USING(objectId) JOIN   ObjectType USING (typeId) WHERE  description = 'Supernova' AND  variability > 0.8 AND  probability > 0.8", // case05/queries/2005_varObjectsOfOneType.sql.FIXME
+
     "SELECT fluxToAbMag(uFlux_PS), fluxToAbMag(gFlux_PS), fluxToAbMag(rFlux_PS), fluxToAbMag(iFlux_PS), fluxToAbMag(zFlux_PS), fluxToAbMag(yFlux_PS) FROM   Object WHERE  (objectId % 100 ) = :percentage", // case05/queries/2006_randomSample.sql.FIXME
+
     "SELECT CASE gid WHEN 1 THEN 'pipeline shutdowns seen' WHEN 2 THEN 'CCDs attempted' WHEN 3 THEN 'src writes' WHEN 4 THEN 'calexp writes' END AS descr, COUNT(*) FROM ( SELECT CASE WHEN COMMENT LIKE 'Processing job:% visit=0 %' THEN 1 WHEN COMMENT LIKE 'Processing job:%' AND COMMENT NOT LIKE '% visit=0 %' THEN 2 WHEN COMMENT LIKE 'Ending write to BoostStorage%/src%' THEN 3 WHEN COMMENT LIKE 'Ending write to FitsStorage%/calexp%' THEN 4 ELSE 0 END AS gid FROM Logs ) AS stats WHERE gid > 0 GROUP BY gid", // case05/queries/2010_logs.sql.FIXME
+
     "SELECT objectId, ra_PS, decl_PS FROM   Object WHERE  ( scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS) - (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))/4 - 0.18 ) BETWEEN -0.2 AND 0.2 AND  ( ( (scisql_fluxToAbMag(rFlux_PS)-scisql_fluxToAbMag(iFlux_PS)) - (scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))/4 - 0.18 ) > (0.45 - 4*(scisql_fluxToAbMag(gFlux_PS)-scisql_fluxToAbMag(rFlux_PS))) )", // case05/queries/3002_query_030.sql.FIXME
+
     "SELECT DISTINCT o1.objectId, o1.ra_PS, o1.decl_PS, o2.iauId FROM   Object o1, Object o2 WHERE  ABS(o2.ra_PS   - o1.ra_PS  ) < o2.raRange/(2*COS(RADIANS(o1.decl_PS))) AND ABS(o2.decl_PS - o1.decl_PS) < o2.declRange/2 AND ( SELECT COUNT(o3.objectId) FROM   Object o3 WHERE  o1.objectId <> o3.objectId AND  ABS(o1.ra_PS   - o3.ra_PS  ) < 0.1/COS(RADIANS(o3.decl_PS)) AND  ABS(o1.decl_PS - o3.decl_PS) < 0.1 ) > 1000", // case05/queries/3003_query_025.sql.FIXME
+
     "SELECT * FROM Object qserv_areaspec_box(1,3,2,4) LIMIT 10", // case05/queries/3020_selectObjectWithLimit.sql.FIXME
+
     "SELECT o1.objectId, o2.objectId FROM Object o1, Object o2 WHERE   qserv_areaspec_box(0.04, 5., -3., 3.) AND scisql_angSep(o1.ra_PS, o1.decl_PS, o2.ra_PS, o2.decl_Ps) < 5.", // case05/queries/3022_selectAllPairsWithinSomeDistanceOfPointsInRegion.sql.FIXME
+
     "SELECT objectId, taiMidPoint, fluxToAbMag(psfMag) FROM   Source JOIN   Object USING(objectId) JOIN   Filter USING(filterId) qserv_areaspec_box(1,3,2,4) AND  filterName = 'u' AND  variability BETWEEN 0 AND 2 ORDER BY objectId, taiMidPoint", // case05/queries/3023_joinObjectSourceFilter.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35 .1, 6.0001);", // case05/queries/8001_badLiteral.sql.FIXME
+
     "SELECT count(*) FROM Object WHERE qserv_areaSpec_box(35, 6, 35. 1, 6.0001);", // case05/queries/8002_badLiteral.sql.FIXME
+
 };
 
 BOOST_DATA_TEST_CASE(antlr_compare, QUERIES, query) {
